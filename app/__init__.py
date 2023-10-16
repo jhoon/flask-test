@@ -44,7 +44,7 @@ def not_found(err):
 def quiz_generate():
     from app.fixtures.quiz_generate import generate_quiz
     data = generate_quiz(9)
-    return data
+    return jsonify(data)
 
 
 # calling function defined in the socket_events.py and passing socketio server import

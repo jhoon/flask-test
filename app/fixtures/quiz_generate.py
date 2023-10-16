@@ -1,4 +1,5 @@
 import requests
+import eventlet
 
 # category ids
 # general knowledge  9
@@ -6,6 +7,8 @@ import requests
 # animals 27
 # geography 22
 # art 25
+
+eventlet.monkey_patch()
 
 def generate_quiz(category_id):
     requests.packages.urllib3.disable_warnings()

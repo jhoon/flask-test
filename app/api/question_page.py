@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from app.socket_events import rooms
-from app.fixtures.quiz import QUIZZES
 
 # QUIZ = QUIZZES[0]
 
@@ -16,7 +15,7 @@ def question():
 
     question_num = rooms[room]["question_index"]
     QUIZ = rooms[room]["quiz"]
-    
+
     if question_num >= len(QUIZ["questions"]):
         # redirect to scoreboard/end of game results!
 

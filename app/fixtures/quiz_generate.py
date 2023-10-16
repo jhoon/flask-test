@@ -8,14 +8,18 @@ import requests
 # art 25
 
 def generate_quiz(category_id):
+    requests.packages.urllib3.disable_warnings()
+
     parameters = {
         'amount': 10,
         'difficulty': 'easy',
         'type': 'multiple',
         'category': category_id
     }
-    response = requests.get("https://opentdb.com/api.php", params=parameters)
-    response.raise_for_status()
+    response = None
+    with no_ssl_verification():
+        response = requests.get("https://opentdb.com/api.php", params=parameters, verify=False)
+    # response.raise_for_status()
     api_response = response.json()
 
     # Initialize a question ID counter
@@ -49,4 +53,43 @@ def generate_quiz(category_id):
 
     return quiz
 
-print(generate_quiz(9))
+# print(generate_quiz(9))
+
+
+import warnings
+import contextlib
+
+# import requests
+from urllib3.exceptions import InsecureRequestWarning
+
+old_merge_environment_settings = requests.Session.merge_environment_settings
+
+@contextlib.contextmanager
+def no_ssl_verification():
+    opened_adapters = set()
+
+    def merge_environment_settings(self, url, proxies, stream, verify, cert):
+        # Verification happens only once per connection so we need to close
+        # all the opened adapters once we're done. Otherwise, the effects of
+        # verify=False persist beyond the end of this context manager.
+        opened_adapters.add(self.get_adapter(url))
+
+        settings = old_merge_environment_settings(self, url, proxies, stream, verify, cert)
+        settings['verify'] = False
+
+        return settings
+
+    requests.Session.merge_environment_settings = merge_environment_settings
+
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', InsecureRequestWarning)
+            yield
+    finally:
+        requests.Session.merge_environment_settings = old_merge_environment_settings
+
+        for adapter in opened_adapters:
+            try:
+                adapter.close()
+            except:
+                pass

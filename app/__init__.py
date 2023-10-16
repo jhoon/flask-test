@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_migrate import Migrate
 from flask_socketio import SocketIO, send
+
 
 # app can be deployed running 'flask run' in terminal OR running 'python3 wsgi.py'
 # 'python3 wsgi.py' is recommended
@@ -38,6 +39,12 @@ print(f"Running on http://localhost:{port}/")
 @app.errorhandler(404)
 def not_found(err):
     return render_template('404.html')
+
+@app.route('/quiz-generate')
+def quiz_generate():
+    from app.fixtures.quiz_generate import generate_quiz
+    data = generate_quiz(9)
+    return data
 
 
 # calling function defined in the socket_events.py and passing socketio server import

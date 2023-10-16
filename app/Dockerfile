@@ -14,8 +14,12 @@ RUN apt install -y pip
 # Create a directory for your project
 WORKDIR /root/production
 
+# Cleanup
+RUN rm -rf recurse-quiz-app
+
 # Clone the Quiz app repo into the container
 RUN git clone https://github.com/jhoon/flask-test.git recurse-quiz-app
+
 # Change to the local repo
 WORKDIR /root/production/recurse-quiz-app
 

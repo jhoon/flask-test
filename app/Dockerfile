@@ -15,12 +15,13 @@ RUN apt install -y pip
 WORKDIR /root/production
 
 # Clone the Quiz app repo into the container
-RUN git clone https://github.com/christopher-ga/recurse-quiz-app.git
+RUN git clone https://github.com/jhoon/flask-test
 # Change to the local repo
 WORKDIR /root/production/recurse-quiz-app
 
 # Install (systemwide) the packages necessary for the Flask quiz app to run
-RUN apt install -y requirements.txt
+# RUN apt install -y gunicorn python3-gunicorn python3-eventlet python3-dotenv python3-flask python3-flask-migrate python3-flask-socketio
+RUN pip install -r requirements.txt
 
 # Copy custom start up script that runs the flask app
 # Run dos2unix to remove possible carriage returns (CR) introduced by Windows during the copy process

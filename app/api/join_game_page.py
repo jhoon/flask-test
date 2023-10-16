@@ -72,6 +72,7 @@ def join_view():
             rooms[room]["replies"] = 0
             rooms[room]["page"] = "game_room_page.join_view"
             rooms[room]["quiz"] = quiz
+            print(quiz)
 
         elif code not in rooms:
             return render_template(

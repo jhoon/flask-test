@@ -2,8 +2,6 @@ import eventlet
 from flask_socketio import send, join_room, leave_room
 from flask import request, session
 
-from app.fixtures.quiz import QUIZZES
-
 eventlet.monkey_patch()
 
 rooms = {}  # dict of room codes containing user data
